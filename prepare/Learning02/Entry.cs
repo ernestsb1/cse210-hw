@@ -1,12 +1,18 @@
-public class Entry
-{
-  public string _date;
-  public string _promptText;
-  public string  _EntryText;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
-  public void Display()
-  {
-    
-  }
+
+class Entry
+{
+    public string Prompt { get; set; }
+    public string Response { get; set; }
+    public string Date { get; set; }
+
+    public Entry(string prompt, string response, string date)
+    {
+        Prompt = prompt;
+        Response = response;
+        Date = date;
+    }
 }
- 
