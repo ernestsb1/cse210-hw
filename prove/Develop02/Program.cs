@@ -1,47 +1,43 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-
-class Program
-
+using System.IO;
+class Program;
 {
-    static void Main(string[] args)
-    {
-        Journal journal = new Journal();
+
         
+{
+        PromptGenerator promptGenerator = new PromptGenerator();
+        Journal journal = new Journal();
 
+        promptGenerator.AddPrompt("Who was the most interesting person I interacted with today?");
+        promptGenerator.AddPrompt("What was the best part of my day?");
+        promptGenerator.AddPrompt("How did I see the hand of the Lord in my life today?");
+        promptGenerator.AddPrompt("What was the strongest emotion I felt today?");
+        promptGenerator.AddPrompt("If I had one thing I could do over today, what would it be?");
+        promptGenerator.AddPrompt("What did you about loving God, give some reason why is like that?");
+        promptGenerator.AddPrompt("How much money did you have in you account, tell us little about it?");
+        promptGenerator.AddPrompt("What did you feel on your wedding day, what would you said about it?");
 
-        while (true)
-        {
-            Console.WriteLine("1. Write a new entry");
-            Console.WriteLine("2. Display the journal");
-            Console.WriteLine("3. Save the journal to a file");
-            Console.WriteLine("4. Load the journal from a file");
-            Console.WriteLine("5. Exit");
-            Console.Write("Enter your choice: ");
-            int choice = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
+        string prompt = promptGenerator.GetRandomPrompt();
 
-            switch (choice)
-            {
-                case 1:
-                    journal.WriteNewEntry();
-                    Console.WriteLine();
-                    break;
-                case 2:
-                    journal.DisplayJournal();
-                    break;
-                case 3:
-                    journal.SaveJournalToFile();
-                    Console.WriteLine();
-                    break;
-                case 4:
-                    journal.LoadJournalFromFile();
-                    Console.WriteLine();
-                    break;
-                case 5:
-                    return;
-            }
-        }
+        Console.WriteLine(prompt);
+        string response = Console.ReadLine();
+        string date = DateTime.Now.ToString("yyyy-MM-dd");
+
+        Entry entry = new Entry(date, prompt, response);
+        journal.AddEntry(entry);
+
+        journal.Display();
+
+        Console.WriteLine("Enter filename to save the journal:");
+        string filename = Console.ReadLine();
+        journal.SaveToFile(filename);
+
+        Console.WriteLine("Enter filename to load a journal from:");
+        string loadFilename = Console.ReadLine();
+        journal.LoadFromFile(loadFilename);
+
+        journal.Display();
     }
+
 }

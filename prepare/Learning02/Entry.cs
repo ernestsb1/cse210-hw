@@ -1,18 +1,25 @@
+
+ernest
 using System;
-using System.Collections.Generic;
-using System.IO;
 
-
-class Entry
+public class Entry
 {
-    public string Prompt { get; set; }
-    public string Response { get; set; }
-    public string Date { get; set; }
+    public string Date { get; private set; }
+    public string PromptText { get; private set; }
+    public string EntryText { get; private set; }
 
-    public Entry(string prompt, string response, string date)
+    public Entry(string date, string promptText, string entryText)
     {
-        Prompt = prompt;
-        Response = response;
         Date = date;
+        PromptText = promptText;
+        EntryText = entryText;
+    }
+
+    public void Display()
+    {
+        Console.WriteLine("Date: " + Date);
+        Console.WriteLine("Prompt: " + PromptText);
+        Console.WriteLine("Entry: " + EntryText);
+        Console.WriteLine();
     }
 }

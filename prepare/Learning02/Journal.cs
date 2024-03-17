@@ -1,92 +1,61 @@
+ernest
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 public class Journal
 {
-    private List<Entry> entries;
+    private List<Entry> _entries;
 
     public Journal()
     {
-        entries = new List<Entry>();
+        _entries = new List<Entry>();
     }
 
-    public void WriteNewEntry()
+    public void AddEntry(Entry entry)
     {
-        string[] prompts = {
-            "Who was the most interesting person I interacted with today?",
-            "What was the best part of my day?",
-            "How did I see the hand of the Lord in my life today?",
-            "What was the strongest emotion I felt today?",
-            "If I had one thing I could do over today, what would it be?",
-            "What is the first thing you think about right now",
-            "Where do you prefer to have you summer holiday vacation this year?"
-        };
-
-        Random rand = new Random();
-        string prompt = prompts[rand.Next(prompts.Length)];
-
-        Console.WriteLine("Prompt: " + prompt);
-        Console.Write("Response: ");
-        string response = Console.ReadLine();
-        string date = DateTime.Today.ToString("MM/dd/yyyy");
-
-        Entry entry = new Entry(prompt, response, date);
-        entries.Add(entry);
+        _entries.Add(entry);
     }
 
-    public void DisplayJournal()
+    public void Display()
     {
-        foreach (Entry entry in entries)
+        foreach (Entry entry in _entries)
         {
-            Console.WriteLine("Date: " + entry.Date);
-            Console.WriteLine("Prompt: " + entry.Prompt);
-            Console.WriteLine("Response: " + entry.Response);
-            Console.WriteLine();
+            entry.Display();
         }
     }
 
-    public void SaveJournalToFile()
+    public void SaveToFile(string file)
     {
-        Console.Write("Enter a filename to save the journal: ");
-        string filename = Console.ReadLine();
-
-        using (StreamWriter writer = new StreamWriter(filename))
+        using (StreamWriter writer = new StreamWriter(file))
         {
-            foreach (Entry entry in entries)
+            foreach (Entry entry in _entries)
             {
-                writer.WriteLine(entry.Date);
-                writer.WriteLine(entry.Prompt);
-                writer.WriteLine(entry.Response);
+                writer.WriteLine($"{entry.Date},{entry.PromptText},{entry.EntryText}");
             }
         }
-
-        Console.WriteLine("Journal saved successfully!");
     }
 
-    public void LoadJournalFromFile()
+    public void LoadFromFile(string file)
     {
-        Console.Write("Enter a filename to load the journal: ");
-        string filename = Console.ReadLine();
+        _entries.Clear();
 
-        if (File.Exists(filename))
+        using (StreamReader reader = new StreamReader(file))
         {
-            entries.Clear();
-
-            using (StreamReader reader = new StreamReader(filename))
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                while (!reader.EndOfStream)
+                string[] parts = line.Split(',');
+                if (parts.Length >= 3)
                 {
-                    string date = reader.ReadLine();
-                    string prompt = reader.ReadLine();
-                    string response = reader.ReadLine();
+                    string date = parts[0];
+                    string promptText = parts[1];
+                    string entryText = parts[2];
 
-                    Entry entry = new Entry(prompt, response, date);
-                    entries.Add(entry);
+                    Entry entry = new Entry(date, promptText, entryText);
+                    _entries.Add(entry);
                 }
             }
-
-            Console.WriteLine("Journal loaded successfully!");
-        }
-        else
-        {
-            Console.WriteLine("File does not exist!");
         }
     }
 }
