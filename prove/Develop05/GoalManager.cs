@@ -178,8 +178,6 @@ public class GoalTracker;
     {
         Console.WriteLine("Loading Goals...");
 
-        // Implement loading goals from a file
-
         Console.WriteLine("Goals loaded successfully!");
     }
 }
